@@ -5,13 +5,13 @@ import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDfXhHNhjCmPl4MEkSLHeM8x6m0eN1NUY4",
-  authDomain: "orbit-4b990.firebaseapp.com",
-  projectId: "orbit-4b990",
-  storageBucket: "orbit-4b990.firebasestorage.app",
-  messagingSenderId: "40079677755",
-  appId: "1:40079677755:web:72a525f25b5c61d1cb3f1e",
-  measurementId: "G-ZYMS4LBF7L"
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
 };
 
 const app = initializeApp(firebaseConfig);

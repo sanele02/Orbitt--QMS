@@ -29,9 +29,9 @@ firebase functions:config:set twilio.phone_number="+1234567890"
 
 **Example:**
 ```bash
-firebase functions:config:set twilio.account_sid="AC1234567890abcdef1234567890abcdef"
-firebase functions:config:set twilio.auth_token="1234567890abcdef1234567890abcdef"
-firebase functions:config:set twilio.phone_number="+12025551234"
+firebase functions:config:set twilio.account_sid=" "
+firebase functions:config:set twilio.auth_token=" "
+firebase functions:config:set twilio.phone_number=" "
 ```
 
 ### STEP 4: Configure PayFast (Payment Service)
