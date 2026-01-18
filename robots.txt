@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Disallow private pages
+Disallow: /dashboard.html
+Disallow: /ProfileSettings.html
+Disallow: /QueueManagement.html
+Disallow: /QueueDisplay.html
+Disallow: /payment-success.html
+Disallow: /subscribe.html
+Disallow: /expire-trial.html
+Disallow: /test-*
+
+# Allow public pages
+Allow: /
+Allow: /Login.html
+Allow: /Signup.html
+Allow: /help.html
+Allow: /faq.html
+Allow: /support.html
+Allow: /terms.html
+Allow: /privacy.html
+Allow: /security.html
+
+# Sitemap
+Sitemap: https://orbit-4b990.web.app/sitemap.xml

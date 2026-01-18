@@ -1,220 +1,293 @@
-# Orbitt 🚀 -- Queue Management System(QMS)
+# Orbit - Queue Management System
 
-Orbitt is a smart digital queue management system designed to reduce waiting times, improve patient flow, and modernise how service-based businesses (starting with medical practices) manage queues.
+A modern, SMS-powered queue management system for clinics with real-time dashboard, payment integration, and automated patient notifications.
 
-Built with accessibility and the South African context in mind, Orbitt works for **both smartphone and non-smartphone users**, supports **SMS notifications**, and is simple enough for clinics to adopt without disrupting their workflow.
- links: [www.orbit.co.za](https://orbitt.co.za) 
- alt link: https://orbit-4b990.firebaseapp.com
+## 🚀 Quick Start
 
----
+### Prerequisites
+- Node.js 22+
+- Firebase CLI
+- Twilio Account
+- PayFast Account (South Africa)
 
-## 🌱 Origin Story
+### Installation
+```bash
+npm install
+cd functions && npm install && cd ..
+firebase login
+firebase use orbit-4b990
+```
 
-Orbitt was inspired by a personal experience.
+### Configuration
+See [DEPLOYMENT_COMMANDS.md](DEPLOYMENT_COMMANDS.md) for detailed setup.
 
-Growing up, I was a frequently ill child and lived with epilepsy. This meant travelling often with my family to see different doctors—sometimes in entirely different provinces. On one particular visit, we left home early in the morning so we could arrive at a clinic as early as possible.
-
-When we arrived, we joined a long line. There wasn’t enough time to get food, and we couldn’t leave the queue because there was a real risk that we would be skipped or pushed back if we stepped away. So we stayed in line, hungry, until after the consultation. Only then were we able to get something to eat.
-
-That experience stayed with me.
-
-Over time, I realised this wasn’t just our problem. Many practices are overcrowded, and patients are effectively trapped in queues—afraid to run errands, get food, or step outside because they might lose their place. Time is wasted, stress increases, and dignity is lost.
-
-Orbitt was born from that insight: **people shouldn’t have to physically stand in line just to hold their place**.
-
----
-
-## 🧠 Problem Orbitt Solves
-
-Traditional queues waste time, overcrowd waiting rooms, and frustrate both clients and staff. Many existing digital solutions:
-
-- Assume everyone has a smartphone  
-- Are expensive or over-engineered  
-- Don’t work well in smaller or local practices  
-
-Orbitt solves this by offering a **lightweight, affordable, and inclusive queueing system**.
+### Deploy
+```bash
+firebase deploy --only functions
+firebase deploy --only hosting
+```
 
 ---
 
-## ✨ Key Features
+## 📋 Documentation
 
-### 👥 Patient Features
-- Join a queue by assisted entry  
-- Receive **SMS alerts** when your turn is approaching  (feature not implemented yet)
-- No app download required  
-- Reduced physical waiting time  
-
-### 🩺 Doctor / Staff Features
-- Dashboard to view and manage the live queue  
-- Call the next patient with one click
-- Call the patient more than once
-- Skip patient
-- Queue display screen with voice announcements
-- Profile settings
-- View basic visit history  
-- Simple and fast onboarding for staff  
-
-### 📲 Accessibility
-- Works for users **without smartphones**  
-- SMS-based notifications for feature phones  
-- Designed for low data usage  
+- **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Complete setup and configuration guide
+- **[CONFIGURATION.md](CONFIGURATION.md)** - Configuration reference and API specs
+- **[DEPLOYMENT_COMMANDS.md](DEPLOYMENT_COMMANDS.md)** - Step-by-step deployment
+- **[PROJECT_SUMMARY.md](PROJECT_SUMMARY.md)** - Project overview and architecture
 
 ---
 
-## 🏗️ Tech Stack
+## ✨ Features
 
-- **Frontend:** Web-based UI (AI-assisted generation)  
-- **Backend:** Firebase (Firestore + Auth)  
-- **Hosting & Deployment:** Firebase Hosting  
-- **Notifications:** SMS integration (planned / optional)  
-- **Architecture:** Serverless-first approach  
+### Queue Management
+- Add patients to queue
+- Real-time queue display
+- Call next patient (sends SMS)
+- Remove patients from queue
+- Search patients by name/phone
+- Track queue statistics
 
-> **Note on AI Usage:** Large portions of the frontend logic, UI scaffolding, and boilerplate code were generated using **Claude** and **Amazon Q**.
+### SMS Notifications
+- Automatic SMS when patient called
+- Twilio integration
+- Cost tracking (R0.95 per SMS)
+- Balance management
+- SMS history logging
 
----
+### Payments
+- PayFast integration
+- Add SMS credits
+- Payment history
+- Automatic balance updates
+- Transaction logging
 
-## 🧩 Challenges & Learnings
+### Dashboard
+- Real-time statistics
+- Current patient display
+- Average wait time calculation
+- Patient queue visualization
+- Sidebar navigation
 
-Building Orbitt exposed real-world engineering and system-design challenges that went beyond writing code. Below are key problems I encountered and how I solved them.
-
-### 1. Queue State Management (Re-calling Patients)
-**Problem:**  
-After calling a patient, the system initially did not allow the same patient to be called again (e.g. if they didn’t respond or stepped away).
-
-**Solution:**  
-I introduced a controlled **state-reset loop** that transitions a queue item back into a callable state when required. This allowed staff to safely recall a patient without duplicating queue entries or breaking the flow.
-
-**What I learned:**  
-
----
-
-### 2. Payment Gateway & Webhooks
-**Problem:**  
-This was my first time working with a payment gateway. I did not know how to safely hide secret keys, merchant keys, and webhook links, and at first some of this data could not be trusted from the app alone.
-
-**Solution:**  
-I learned how to keep all secret keys out of the app and store them in the backend and environment settings. I also used webhooks so the backend, not the app, confirms when a payment is successful before updating Firestore.
-
-**What I learned:**  
-Secret keys must never be in the app. Payments should always be checked on the backend, not from the user’s screen.
-
----
-
-### 3. Firestore Security Rules Breaking the App
-**Problem:**  
-Tightened Firestore rules initially broke reads/writes across the app, causing unexpected permission errors.
-
-**Solution:**  
-I redesigned **Firestore rules**  and y tested reads and writes to ensure least-privilege access without breaking functionality. Firebase rules affected my Login and sign-up pages
-
-**What I learned:**  
-Security rules are part of the application logic and must be designed and tested like code, which then made me further understand the role of people who work/specialize in security. 
+### Profile Management
+- Update doctor information
+- View clinic details
+- Manage operating hours
+- View billing history
+- Reset password
 
 ---
 
-### 4. Integrating AI-Generated Code
-**Problem:**  
-Some AI-generated frontend code conflicted with real backend constraints such as authentication state, async Firestore reads, and permissions.
+## 🏗️ Architecture
 
-**Solution:**  
-Refactored AI outputs to align with Firebase Auth lifecycle, async Firestore reads, and deployment constraints. Treated AI code as a draft, not a final source of truth.
+### Frontend
+- HTML5, CSS3, JavaScript
+- Bootstrap Icons
+- Firebase SDK
+- Real-time Firestore listeners
 
-**What I learned:**  
-AI accelerates development, but architectural ownership and validation remain human responsibilities.
+### Backend
+- Firebase Cloud Functions (Node.js 22)
+- Firestore Database
+- Firebase Authentication
 
----
-
-### 5. Deployment & Environment Configuration
-**Problem:**  
-Environment misconfigurations caused differences between local behavior and production.
-
-**Solution:**  
-A hard reload worked most of the time(Ctrl+shift+R), and also clearing the Firebase cache.
-
-**What I learned:**  
-Even in serverless systems, DevOps discipline and environment consistency are essential.
+### External Services
+- Twilio (SMS)
+- PayFast (Payments)
+- Firebase Hosting
 
 ---
 
-Overall, these challenges strengthened Orbitt’s reliability and shaped my approach as a **Solution Architect & Lead Integrator**, with a strong focus on correctness, security, and real-world usability.
+## 📁 Project Structure
 
-## 🔐 Authentication
-
-- Secure login for doctors and staff    
-- Patient access does not require an account  
-
----
-
-## 🎯 Target Users
-
-- General Practitioners (GPs)  
-- Clinics and medical practices  
-- Small to medium service-based businesses  
-- Businesses operating in areas with mixed smartphone access  
-
----
-
-## 📦 Deployment
-
-Orbitt is designed to be:
-
-- Easy to deploy  
-- Easy to maintain  
-- Easy to scale per clinic  
-
-Each practice can run its own isolated instance or be onboarded into a shared platform.
+```
+Orbit/
+├── index.html                 # Landing page
+├── Login.html                 # Login page
+├── dashboard.html             # Dashboard
+├── ProfileSettings.html       # Profile page
+├── auth.js                    # Authentication
+├── dashboard.js               # Dashboard logic
+├── ProfileSettings.js         # Profile logic
+├── functions/
+│   ├── index.js               # Cloud Functions
+│   └── package.json           # Dependencies
+├── SETUP_GUIDE.md             # Setup guide
+├── CONFIGURATION.md           # Configuration
+├── DEPLOYMENT_COMMANDS.md     # Deployment
+├── PROJECT_SUMMARY.md         # Summary
+└── README.md                  # This file
+```
 
 ---
 
-## 🚧 Roadmap
+## 🔧 Configuration
 
-- [ ] SMS notifications for queue alerts  
-- [ ] Physical ticket printing integration  
-- [ ] Analytics dashboard (wait times, peak hours)  
-- [ ] Multi-branch support  
-- [ ] Payments & subscriptions  
+### Twilio (SMS)
+```bash
+firebase functions:config:set twilio.account_sid="YOUR_SID"
+firebase functions:config:set twilio.auth_token="YOUR_TOKEN"
+firebase functions:config:set twilio.phone_number="+1234567890"
+```
 
----
-
-## 🤝 Contributing
-
-This project is currently developed and maintained by a single developer. Contributions, ideas, and feedback are welcome.
-
-If you’re interested in collaborating, feel free to reach out.
-
----
-
-## 👨‍💻 Role & Authorship
-
-**Sanele Mhlanga**  
-**Solution Architect & Lead Integrator**
-
-On Orbitt, my primary role was **solution architecture and system integration**, rather than traditional line-by-line development.
-
-### Responsibilities included:
-- Designing the overall system architecture  
-- Defining product requirements and user flows  
-- Connecting and configuring the backend (Firebase, Auth, Firestore, security)  
-- Deployment, hosting, and DevOps decisions  
-- Research into queueing systems, accessibility, and clinic workflows  
-
-### AI Contribution
-- **Claude** and **Amazon Q** were used extensively to generate:
-  - UI components and layouts
-  -  OTHER AI USED: CHAT GPT, DeepSeek, Copilot
-  - Frontend logic and scaffolding  
-  - Boilerplate and repetitive code  
-
-Orbitt is therefore best described as an **AI-augmented build**, where human effort focused on **architecture, validation, integration, and real-world problem solving**.
-
-South Africa
+### PayFast (Payments)
+```bash
+firebase functions:config:set payfast.merchant_id="YOUR_ID"
+firebase functions:config:set payfast.merchant_key="YOUR_KEY"
+firebase functions:config:set payfast.passphrase="YOUR_PASS"
+```
 
 ---
 
-## 📄 License
+## 🚀 Deployment
 
-This project is proprietary. All rights reserved unless otherwise stated.
+### Step 1: Install Dependencies
+```bash
+npm install
+cd functions && npm install && cd ..
+```
+
+### Step 2: Configure Services
+```bash
+firebase functions:config:set twilio.account_sid="..."
+firebase functions:config:set payfast.merchant_id="..."
+```
+
+### Step 3: Deploy
+```bash
+firebase deploy --only functions
+firebase deploy --only hosting
+```
+
+### Step 4: Verify
+```bash
+firebase functions:list
+firebase functions:log
+```
 
 ---
 
-> Orbitt is about **respecting people’s time** — especially where time matters most.
+## 🧪 Testing
+
+### Login Test
+1. Go to https://orbit-4b990.web.app/Login.html
+2. Enter: sanele1238@gmail.com
+3. Enter: sanele1238#@Test
+4. Should redirect to dashboard
+
+### Queue Test
+1. Add patient to queue
+2. Verify patient appears
+3. Search for patient
+4. Call patient (sends SMS)
+
+### Payment Test
+1. Go to Profile Settings
+2. Click "Add SMS Credits"
+3. Verify PayFast redirect
+
+---
+
+## 📊 Cloud Functions
+
+### Available Functions
+
+| Function | Type | Purpose |
+|----------|------|---------|
+| sendSMSNotification | Callable | Send SMS to patient |
+| createPayFastPayment | Callable | Create payment link |
+| payFastWebhook | HTTP | Handle payment confirmation |
+| getDoctorBilling | Callable | Get billing information |
+| getQueueStats | Callable | Get queue statistics |
+| testAuth | Callable | Test authentication |
+
+---
+
+## 🔐 Security
+
+- Firebase Authentication (email/password)
+- Firestore security rules
+- PayFast signature verification
+- HTTPS only
+- Encrypted credentials
+- No sensitive data in logs
+
+---
+
+## 📈 Monitoring
+
+### View Logs
+```bash
+firebase functions:log
+firebase functions:log --follow
+```
+
+### Monitor Firestore
+- Firebase Console → Firestore → Data
+- Check collections for data integrity
+
+### Monitor Payments
+- Firebase Console → Firestore → payment_logs
+- Verify all transactions recorded
+
+---
+
+## 🐛 Troubleshooting
+
+### SMS Not Sending
+- Check Twilio balance
+- Verify phone number format
+- Check doctor balance
+- Review function logs
+
+### Payment Not Processing
+- Verify PayFast credentials
+- Check webhook URL
+- Verify signature generation
+- Review function logs
+
+### Firestore Permission Denied
+- Check security rules
+- Verify user authentication
+- Check doctorId matches uid
+
+---
+
+## 📚 Resources
+
+- [Firebase Docs](https://firebase.google.com/docs)
+- [Twilio Docs](https://www.twilio.com/docs)
+- [PayFast Docs](https://www.payfast.co.za/documentation)
+- [Cloud Functions](https://firebase.google.com/docs/functions)
+
+---
+
+## 🔗 Production URLs
+
+- **Main Site**: https://orbit-4b990.web.app/
+- **Login**: https://orbit-4b990.web.app/Login.html
+- **Dashboard**: https://orbit-4b990.web.app/dashboard.html
+- **Profile**: https://orbit-4b990.web.app/ProfileSettings.html
+
+---
+
+## 📝 License
+
+Proprietary - Orbit Queue Management System
+
+---
+
+## 👤 Support
+
+For issues or questions:
+1. Check documentation files
+2. Review function logs: `firebase functions:log`
+3. Check Firestore security rules
+4. Verify environment variables
+
+---
+
+**Status**: ✅ Ready for Deployment  
+**Version**: 1.0  
+**Firebase Project**: orbit-4b990  
+**Last Updated**: 2024

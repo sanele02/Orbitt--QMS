@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Orbit</title>
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            font-size: 40px;
+        }
+        h1 {
+            font-size: 28px;
+            color: #1f2937;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .loader {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">✓</div>
+        <h1>Payment Successful!</h1>
+        <p id="message">Processing your subscription...</p>
+        <div class="loader" id="loader"></div>
+        <button class="btn" id="dashboardBtn" style="display: none;" onclick="goToDashboard()">Go to Dashboard</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfXhHNhjCmPl4MEkSLHeM8x6m0eN1NUY4",
+            authDomain: "orbit-4b990.firebaseapp.com",
+            projectId: "orbit-4b990",
+            storageBucket: "orbit-4b990.firebasestorage.app",
+            messagingSenderId: "40079677755",
+            appId: "1:40079677755:web:72a525f25b5c61d1cb3f1e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function activateSubscription() {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                window.location.href = 'Login.html';
+                return;
+            }
+
+            try {
+                // Get user data to determine package
+                const userDoc = await db.collection('doctors').doc(user.uid).get();
+                const userData = userDoc.data();
+                const packageType = userData.packageType || 'starter';
+                
+                // Calculate next billing date (1 month from now)
+                const now = new Date();
+                const nextBilling = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
+                
+                // Update user subscription status
+                await db.collection('doctors').doc(user.uid).update({
+                    subscriptionStatus: 'active',
+                    subscriptionStartDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastPaymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    nextBillingDate: firebase.firestore.Timestamp.fromDate(nextBilling)
+                });
+                
+                // Generate invoice number
+                const invoiceNum = 'INV-' + Date.now();
+                const amount = packageType === 'professional' ? 'R799.00' : 'R299.00';
+                
+                // Save invoice to Firestore
+                await db.collection('invoices').add({
+                    userId: user.uid,
+                    invoiceNumber: invoiceNum,
+                    packageType: packageType,
+                    amount: amount,
+                    paymentDate: firebase.firestore.FieldValue.serverTimestamp(),
+                    nextBillingDate: firebase.firestore.Timestamp.fromDate(nextBilling),
+                    status: 'paid'
+                });
+                
+                // Send payment confirmation and invoice email
+                await db.collection('mail').add({
+                    to: user.email,
+                    message: {
+                        subject: `Payment Successful - Invoice ${invoiceNum}`,
+                        html: `
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta charset="UTF-8">
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            </head>
+                            <body style="margin: 0; padding: 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+                                <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f3f4f6; padding: 40px 20px;">
+                                    <tr>
+                                        <td align="center">
+                                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                                <!-- Header Banner -->
+                                                <tr>
+                                                    <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                                                        <h1 style="color: white; margin: 0; font-size: 36px; font-weight: 300; letter-spacing: 2px;">○ ORBIT</h1>
+                                                        <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0 0; font-size: 14px; letter-spacing: 1px;">QUEUE MANAGEMENT SYSTEM</p>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <!-- Success Badge -->
+                                                <tr>
+                                                    <td style="padding: 30px 30px 20px 30px; text-align: center;">
+                                                        <div style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 15px 40px; border-radius: 50px; font-size: 20px; font-weight: 600; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                                                            ✓ Payment Successful
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <!-- Content -->
+                                                <tr>
+                                                    <td style="padding: 20px 40px;">
+                                                        <p style="color: #1f2937; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;">Dear <strong>${userData.fullName || 'Customer'}</strong>,</p>
+                                                        <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 0 0 30px 0;">Thank you for your payment. Your Orbit subscription is now active and ready to use!</p>
+                                                        
+                                                        <!-- Invoice Box -->
+                                                        <div style="background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%); border: 2px solid #e5e7eb; border-radius: 12px; padding: 25px; margin: 30px 0;">
+                                                            <h3 style="margin: 0 0 20px 0; color: #667eea; font-size: 18px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">📄 Invoice Details</h3>
+                                                            <table width="100%" cellpadding="8" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="color: #6b7280; font-size: 14px;">Invoice Number:</td>
+                                                                    <td style="text-align: right; font-weight: 600; color: #1f2937; font-size: 14px;">${invoiceNum}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="color: #6b7280; font-size: 14px;">Date:</td>
+                                                                    <td style="text-align: right; font-weight: 600; color: #1f2937; font-size: 14px;">${now.toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="color: #6b7280; font-size: 14px;">Subscription Plan:</td>
+                                                                    <td style="text-align: right; font-weight: 600; color: #1f2937; font-size: 14px;">${packageType.charAt(0).toUpperCase() + packageType.slice(1)} Plan</td>
+                                                                </tr>
+                                                                <tr style="border-top: 2px solid #667eea;">
+                                                                    <td style="padding-top: 15px; color: #1f2937; font-weight: 700; font-size: 16px;">Amount Paid:</td>
+                                                                    <td style="padding-top: 15px; text-align: right; font-weight: 700; font-size: 22px; color: #10b981;">${amount}</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                        <!-- Next Billing Info -->
+                                                        <div style="background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%); border-left: 4px solid #667eea; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                                                            <p style="margin: 0 0 8px 0; color: #1f2937; font-weight: 600; font-size: 15px;">📅 Next Billing Date</p>
+                                                            <p style="margin: 0 0 12px 0; color: #4c1d95; font-size: 18px; font-weight: 700;">${nextBilling.toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                                            <p style="margin: 0; color: #6b7280; font-size: 13px;">💡 You'll receive a reminder email 3 days before your next billing date.</p>
+                                                        </div>
+                                                        
+                                                        <!-- CTA Button -->
+                                                        <div style="text-align: center; margin: 35px 0;">
+                                                            <a href="https://orbit-4b990.web.app/dashboard.html" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 14px 40px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);">Go to Dashboard →</a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <!-- Footer Banner -->
+                                                <tr>
+                                                    <td style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%); padding: 30px 40px; text-align: center;">
+                                                        <p style="color: rgba(255,255,255,0.9); margin: 0 0 8px 0; font-size: 15px; font-weight: 500;">Thank you for choosing Orbit! 🚀</p>
+                                                        <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 13px;">This is an automated email. Please do not reply to this message.</p>
+                                                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                                                            <p style="color: rgba(255,255,255,0.5); margin: 0; font-size: 12px;">© 2024 Orbit Queue Management System. All rights reserved.</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </body>
+                            </html>
+                        `
+                    }
+                });
+
+                document.getElementById('message').textContent = 'Your subscription is now active!';
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('dashboardBtn').style.display = 'block';
+            } catch (error) {
+                console.error('Error activating subscription:', error);
+                document.getElementById('message').textContent = 'Subscription activated! Redirecting...';
+                setTimeout(() => window.location.href = 'dashboard.html', 2000);
+            }
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                setTimeout(activateSubscription, 2000);
+            } else {
+                window.location.href = 'Login.html';
+            }
+        });
+    </script>
+</body>
+</html>

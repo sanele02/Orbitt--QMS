@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+    <style>
+        body { font-family: Arial; padding: 40px; max-width: 600px; margin: 0 auto; }
+        .test { padding: 20px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; }
+        .success { background: #d1fae5; border-color: #10b981; }
+        .error { background: #fee2e2; border-color: #ef4444; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        input { padding: 8px; margin: 5px; width: 300px; }
+        #log { background: #f3f4f6; padding: 15px; border-radius: 8px; margin-top: 20px; max-height: 400px; overflow-y: auto; }
+    </style>
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <h1>Firebase Auth Test</h1>
+    
+    <div class="test">
+        <h3>Test Email/Password Login</h3>
+        <input type="email" id="testEmail" placeholder="Email" value="sanele1238@gmail.com">
+        <input type="password" id="testPassword" placeholder="Password" value="sanele1238#@Test">
+        <button onclick="testLogin()">Test Login</button>
+    </div>
+    
+    <div class="test">
+        <h3>Test Password Reset</h3>
+        <input type="email" id="resetEmail" placeholder="Email" value="sanele1238@gmail.com">
+        <button onclick="testPasswordReset()">Send Reset Email</button>
+    </div>
+    
+    <div class="test">
+        <h3>Current Auth State</h3>
+        <div id="authState">Checking...</div>
+        <button onclick="testSignOut()">Sign Out</button>
+    </div>
+    
+    <h3>Console Log:</h3>
+    <div id="log"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfXhHNhjCmPl4MEkSLHeM8x6m0eN1NUY4",
+            authDomain: "orbit-4b990.firebaseapp.com",
+            projectId: "orbit-4b990",
+            storageBucket: "orbit-4b990.firebasestorage.app",
+            messagingSenderId: "40079677755",
+            appId: "1:40079677755:web:72a525f25b5c61d1cb3f1e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        function log(message, isError = false) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div style="color: ${isError ? 'red' : 'green'}; margin: 5px 0;">[${time}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        window.testLogin = async function() {
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            
+            log(`Attempting login with: ${email}`);
+            
+            try {
+                const result = await signInWithEmailAndPassword(auth, email, password);
+                log(`✓ Login successful! User: ${result.user.email}`);
+            } catch (error) {
+                log(`✗ Login failed: ${error.code} - ${error.message}`, true);
+            }
+        };
+
+        window.testPasswordReset = async function() {
+            const email = document.getElementById('resetEmail').value;
+            
+            log(`Sending password reset to: ${email}`);
+            
+            try {
+                await sendPasswordResetEmail(auth, email);
+                log(`✓ Password reset email sent!`);
+            } catch (error) {
+                log(`✗ Reset failed: ${error.code} - ${error.message}`, true);
+            }
+        };
+
+        window.testSignOut = async function() {
+            try {
+                await signOut(auth);
+                log(`✓ Signed out successfully`);
+            } catch (error) {
+                log(`✗ Sign out failed: ${error.message}`, true);
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            const authState = document.getElementById('authState');
+            if (user) {
+                authState.innerHTML = `<strong>Logged in as:</strong> ${user.email}<br><strong>UID:</strong> ${user.uid}`;
+                log(`Auth state: Logged in as ${user.email}`);
+            } else {
+                authState.innerHTML = '<strong>Not logged in</strong>';
+                log(`Auth state: Not logged in`);
+            }
+        });
+
+        log('Firebase Auth initialized');
+    </script>
+</body>
+</html>

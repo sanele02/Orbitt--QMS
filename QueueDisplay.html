@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queue Display - Orbit</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="QueueDisplay.css" />
+  <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <!-- Top Metrics -->
+    <div class="top-metrics">
+        <div class="metric-box">
+            <div class="metric-label">Currently Serving</div>
+            <div class="metric-number" id="currentNumber">-</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">Waiting in Line</div>
+            <div class="metric-number" id="peopleInLine">0</div>
+        </div>
+    </div>
+
+    <!-- Next 3 in Queue -->
+    <div class="next-three-section">
+        <div class="section-title">NEXT IN LINE</div>
+        <div class="next-three-grid" id="nextThreeGrid">
+            <!-- Next 3 queue numbers will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="partners-label">Powered by</div>
+        <div class="orbit-logo">ORBITT</div>
+        <div class="partners-label" >WWW.orbitt.co.za</div>
+        
+        <div class="partner-logos">
+            
+        </div>
+    </div>
+
+  <!-- Firebase v8 SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  
+  <script src="QueueDisplay.js"></script>
+</body>
+</html>

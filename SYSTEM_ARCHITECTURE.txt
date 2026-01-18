@@ -1,0 +1,432 @@
+================================================================================
+                    ORBIT - SYSTEM ARCHITECTURE
+================================================================================
+
+COMPLETE SYSTEM DIAGRAM
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           FRONTEND (Web App)                                │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐          │
+│  │  Login.html      │  │ dashboard.html   │  │ProfileSettings   │          │
+│  │  auth.js         │  │ dashboard.js     │  │ProfileSettings.js│          │
+│  │                  │  │ dashboard.css    │  │ProfileSettings   │          │
+│  │ • Email/Password │  │                  │  │.css              │          │
+│  │ • Session Mgmt   │  │ • Queue Mgmt     │  │                  │          │
+│  │ • Redirect       │  │ • Add Patient    │  │ • Profile Edit   │          │
+│  │                  │  │ • Call Patient   │  │ • Billing Info   │          │
+│  │                  │  │ • SMS Sending    │  │ • Add Credits    │          │
+│  │                  │  │ • Real-time      │  │ • Password Reset │          │
+│  │                  │  │   Display        │  │                  │          │
+│  └──────────────────┘  └──────────────────┘  └──────────────────┘          │
+│           │                     │                      │                    │
+└───────────┼─────────────────────┼──────────────────────┼────────────────────┘
+            │                     │                      │
+            └─────────────────────┼──────────────────────┘
+                                  │
+                    ┌─────────────▼──────────────┐
+                    │   Firebase SDK (v8/v10)    │
+                    │                            │
+                    │ • Authentication           │
+                    │ • Firestore               │
+                    │ • Cloud Functions         │
+                    └─────────────┬──────────────┘
+                                  │
+        ┌─────────────────────────┼─────────────────────────┐
+        │                         │                         │
+        ▼                         ▼                         ▼
+┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐
+│  Firebase Auth   │    │  Firestore DB    │    │ Cloud Functions  │
+│                  │    │                  │    │                  │
+│ • Email/Password │    │ Collections:     │    │ 1. testAuth      │
+│ • Session Tokens │    │ • doctors        │    │ 2. sendSMS       │
+│ • User UID       │    │ • queue          │    │ 3. createPayment │
+│                  │    │ • sms_logs       │    │ 4. payFastHook   │
+│                  │    │ • payment_logs   │    │ 5. getBilling    │
+│                  │    │ • pending_pay    │    │ 6. getQueueStats │
+│                  │    │                  │    │                  │
+└──────────────────┘    └──────────────────┘    └────────┬─────────┘
+                                                         │
+                        ┌────────────────────────────────┼────────────────────┐
+                        │                                │                    │
+                        ▼                                ▼                    ▼
+                    ┌──────────────┐            ┌──────────────┐    ┌──────────────┐
+                    │   Twilio     │            │  PayFast     │    │  Firestore   │
+                    │   (SMS)      │            │  (Payments)  │    │  (Logging)   │
+                    │              │            │              │    │              │
+                    │ • Send SMS   │            │ • Create     │    │ • SMS Logs   │
+                    │ • Track      │            │   Payment    │    │ • Payment    │
+                    │   Delivery   │            │ • Verify     │    │   Logs       │
+                    │              │            │   Signature  │    │              │
+                    └──────────────┘            └──────────────┘    └──────────────┘
+
+
+DATA FLOW DIAGRAMS
+================================================================================
+
+FLOW 1: SEND SMS
+─────────────────
+
+Doctor clicks "Call" button
+        │
+        ▼
+moveToCurrentPatient() in dashboard.js
+        │
+        ▼
+sendSMSNotification() function
+        │
+        ▼
+firebase.functions().httpsCallable('sendSMSNotification')
+        │
+        ▼
+Cloud Function (index.js)
+        │
+        ├─► Check authentication
+        │
+        ├─► Get doctor profile
+        │
+        ├─► Check balance (>= R0.95)
+        │
+        ├─► Call Twilio API
+        │       │
+        │       ▼
+        │   SMS sent to patient
+        │
+        ├─► Deduct R0.95 from balance
+        │
+        ├─► Log SMS in Firestore
+        │
+        └─► Return result to frontend
+                │
+                ▼
+        Update balance display
+                │
+                ▼
+        Show success message
+
+
+FLOW 2: ADD SMS CREDITS
+───────────────────────
+
+Doctor clicks "Add SMS Credits"
+        │
+        ▼
+handleAddSmsCredits() in ProfileSettings.js
+        │
+        ▼
+Prompt for amount
+        │
+        ▼
+firebase.functions().httpsCallable('createPayFastPayment')
+        │
+        ▼
+Cloud Function (index.js)
+        │
+        ├─► Check authentication
+        │
+        ├─► Validate amount (>= R5)
+        │
+        ├─► Generate PayFast form data
+        │
+        ├─► Create signature (MD5)
+        │
+        ├─► Store pending payment in Firestore
+        │
+        └─► Return form data to frontend
+                │
+                ▼
+        Generate HTML form
+                │
+                ▼
+        Submit to PayFast
+                │
+                ▼
+        Doctor completes payment
+                │
+                ▼
+        PayFast sends webhook
+                │
+                ▼
+        payFastWebhook Cloud Function
+                │
+                ├─► Verify signature
+                │
+                ├─► Update doctor balance
+                │
+                ├─► Log payment in Firestore
+                │
+                └─► Mark pending payment complete
+                        │
+                        ▼
+                Doctor redirected to dashboard
+
+
+FLOW 3: VIEW BILLING INFO
+─────────────────────────
+
+Profile page loads
+        │
+        ▼
+loadSmsRate() in ProfileSettings.js
+        │
+        ▼
+firebase.functions().httpsCallable('getDoctorBilling')
+        │
+        ▼
+Cloud Function (index.js)
+        │
+        ├─► Check authentication
+        │
+        ├─► Get doctor profile
+        │
+        ├─► Query SMS logs
+        │
+        ├─► Query payment logs
+        │
+        ├─► Calculate totals
+        │
+        └─► Return billing data
+                │
+                ▼
+        Display SMS count
+        Display SMS rate
+        Display recent payments
+        Display recent SMS logs
+
+
+FIRESTORE COLLECTIONS
+================================================================================
+
+doctors
+├─ doctorId (UID)
+├─ fullName
+├─ email
+├─ phoneNumber
+├─ clinicName
+├─ clinicAddress
+├─ balance
+├─ totalSmsSent
+├─ operatingDays
+├─ workingHours
+└─ timestamps
+
+queue
+├─ patientFullName
+├─ patientPhoneNumber
+├─ patientGender
+├─ assignedDoctorId
+├─ status (waiting/current/completed/removed)
+├─ timestampAdded
+├─ timestampCalled
+├─ timestampCompleted
+└─ smsNotified
+
+sms_logs
+├─ doctorId
+├─ queueId
+├─ patientPhoneNumber
+├─ message
+├─ status (sent/failed)
+├─ cost
+├─ twilioSid
+└─ sentAt
+
+payment_logs
+├─ doctorId
+├─ amount
+├─ currency
+├─ status (succeeded/failed)
+├─ payFastPaymentId
+├─ paymentId
+└─ createdAt
+
+pending_payments
+├─ doctorId
+├─ amount
+├─ status (pending/completed)
+├─ paymentId
+└─ createdAt
+
+
+SECURITY LAYERS
+================================================================================
+
+Layer 1: Authentication
+┌─────────────────────────────────────────┐
+│ Firebase Auth (Email/Password)          │
+│ • User UID verification                 │
+│ • Session token validation              │
+│ • Auto-logout on inactivity             │
+└─────────────────────────────────────────┘
+
+Layer 2: Authorization
+┌─────────────────────────────────────────┐
+│ Firestore Security Rules                │
+│ • Doctor can only access own data       │
+│ • Queue restricted by doctorId          │
+│ • SMS logs restricted by doctorId       │
+│ • Payment logs restricted by doctorId   │
+└─────────────────────────────────────────┘
+
+Layer 3: Function Security
+┌─────────────────────────────────────────┐
+│ Cloud Function Validation               │
+│ • Auth check at function entry          │
+│ • Input validation                      │
+│ • Error handling                        │
+│ • Logging for audit trail               │
+└─────────────────────────────────────────┘
+
+Layer 4: Payment Security
+┌─────────────────────────────────────────┐
+│ PayFast Integration                     │
+│ • MD5 signature verification            │
+│ • Webhook validation                    │
+│ • Secure data transmission              │
+│ • Transaction logging                   │
+└─────────────────────────────────────────┘
+
+
+DEPLOYMENT ARCHITECTURE
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────┐
+│                    Firebase Project (orbit-4b990)               │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Firebase Hosting                                         │  │
+│  │ • Serves HTML/CSS/JS files                              │  │
+│  │ • HTTPS enabled                                         │  │
+│  │ • CDN distribution                                      │  │
+│  │ • URL: https://orbit-4b990.web.app/                    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Cloud Functions (Node.js 22)                             │  │
+│  │ • 6 callable functions                                  │  │
+│  │ • 1 HTTP webhook                                        │  │
+│  │ • Region: us-central1                                  │  │
+│  │ • Memory: 256MB per function                           │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Firestore Database                                       │  │
+│  │ • 5 collections                                         │  │
+│  │ • Real-time listeners                                  │  │
+│  │ • Security rules enabled                               │  │
+│  │ • Automatic backups                                    │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Firebase Authentication                                  │  │
+│  │ • Email/Password provider                              │  │
+│  │ • Session management                                   │  │
+│  │ • User UID generation                                  │  │
+│  └──────────────────────────────────────────────────────────┘  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+
+
+INTEGRATION CHECKLIST
+================================================================================
+
+Frontend Integration
+✅ dashboard.js - sendSMSNotification connected
+✅ ProfileSettings.js - Payment functions connected
+✅ ProfileSettings.html - Add SMS Credits button
+✅ auth.js - Authentication working
+✅ All Firebase SDKs initialized
+
+Backend Integration
+✅ sendSMSNotification - Twilio connected
+✅ createPayFastPayment - PayFast connected
+✅ payFastWebhook - Webhook configured
+✅ getDoctorBilling - Firestore queries
+✅ getQueueStats - Queue statistics
+✅ testAuth - Authentication test
+
+Database Integration
+✅ doctors collection - Profile storage
+✅ queue collection - Patient queue
+✅ sms_logs collection - SMS history
+✅ payment_logs collection - Payment history
+✅ pending_payments collection - Payment tracking
+
+External Services
+✅ Twilio - SMS sending
+✅ PayFast - Payment processing
+✅ Firebase - Hosting & Backend
+
+Security
+✅ Authentication - Firebase Auth
+✅ Authorization - Firestore rules
+✅ Payment - PayFast signature verification
+✅ Data - HTTPS & encryption
+
+
+PERFORMANCE METRICS
+================================================================================
+
+Expected Response Times:
+- sendSMSNotification: 2-5 seconds
+- createPayFastPayment: 1-3 seconds
+- getDoctorBilling: 1-2 seconds
+- getQueueStats: 1-2 seconds
+- Firestore queries: < 1 second
+
+Expected Throughput:
+- Concurrent users: 1000+
+- SMS per minute: 100+
+- Payments per hour: 50+
+- Queue updates: Real-time
+
+
+MONITORING & LOGGING
+================================================================================
+
+Function Logs
+firebase functions:log
+firebase functions:log --follow
+
+Firestore Monitoring
+Firebase Console → Firestore → Usage
+
+Payment Monitoring
+Firebase Console → Firestore → payment_logs
+
+SMS Monitoring
+Firebase Console → Firestore → sms_logs
+
+Error Tracking
+Browser Console (F12)
+Firebase Console → Functions → Logs
+
+
+DISASTER RECOVERY
+================================================================================
+
+Backup Strategy
+- Firestore automatic backups
+- Code version control (Git)
+- Configuration stored in Firebase
+
+Recovery Procedures
+1. Restore from Firestore backup
+2. Redeploy functions
+3. Verify all systems
+4. Test end-to-end flows
+
+Rollback Plan
+1. Identify issue
+2. Revert code changes
+3. Redeploy functions
+4. Verify functionality
+
+
+================================================================================
+                    SYSTEM ARCHITECTURE COMPLETE
+                    All components integrated and working
+================================================================================

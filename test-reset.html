@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Password Reset</title>
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <h2>Test Password Reset</h2>
+    <input type="email" id="testEmail" placeholder="Enter email" value="sanele1238@gmail.com">
+    <button id="testResetBtn">Send Reset Email</button>
+    <div id="result"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+        import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfXhHNhjCmPl4MEkSLHeM8x6m0eN1NUY4",
+            authDomain: "orbit-4b990.firebaseapp.com",
+            projectId: "orbit-4b990",
+            storageBucket: "orbit-4b990.firebasestorage.app",
+            messagingSenderId: "40079677755",
+            appId: "1:40079677755:web:72a525f25b5c61d1cb3f1e",
+            measurementId: "G-ZYMS4LBF7L"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('testResetBtn').addEventListener('click', async () => {
+            const email = document.getElementById('testEmail').value;
+            const result = document.getElementById('result');
+            
+            try {
+                const actionCodeSettings = {
+                    url: 'https://orbit-4b990.web.app/Login.html?email=' + email,
+                    handleCodeInApp: true
+                };
+                
+                await sendPasswordResetEmail(auth, email, actionCodeSettings);
+                result.innerHTML = `<p style="color: green;">Reset email sent to ${email}</p>`;
+                console.log('Success: Reset email sent');
+            } catch (error) {
+                result.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expire Trial - Admin Tool</title>
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <h1>Expire Trial for User</h1>
+    <p>Email: sanelemhlanga70@gmail.com</p>
+    <button onclick="expireTrial()">Expire Trial Now</button>
+    <p id="status"></p>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfXhHNhjCmPl4MEkSLHeM8x6m0eN1NUY4",
+            authDomain: "orbit-4b990.firebaseapp.com",
+            projectId: "orbit-4b990",
+            storageBucket: "orbit-4b990.firebasestorage.app",
+            messagingSenderId: "40079677755",
+            appId: "1:40079677755:web:72a525f25b5c61d1cb3f1e"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function expireTrial() {
+            const status = document.getElementById('status');
+            status.textContent = 'Processing...';
+
+            try {
+                // Find user by email
+                const snapshot = await db.collection('doctors')
+                    .where('email', '==', 'sanelemhlanga70@gmail.com')
+                    .get();
+
+                if (snapshot.empty) {
+                    status.textContent = 'User not found!';
+                    return;
+                }
+
+                const userDoc = snapshot.docs[0];
+                const userId = userDoc.id;
+
+                // Set createdAt to 31 days ago
+                const expiredDate = new Date();
+                expiredDate.setDate(expiredDate.getDate() - 31);
+
+                await db.collection('doctors').doc(userId).update({
+                    createdAt: firebase.firestore.Timestamp.fromDate(expiredDate)
+                });
+
+                status.textContent = `✅ Trial expired! User: ${userId}. Trial ended 1 day ago. Try logging in now.`;
+            } catch (error) {
+                status.textContent = '❌ Error: ' + error.message;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>

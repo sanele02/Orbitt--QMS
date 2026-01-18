@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Orbit - Smart Queue Management System for Businesses | Real-Time Queue Display</title>
+    <meta name="description" content="Modern queue management system with real-time display, voice announcements, and easy dashboard. Perfect for clinics, retail stores, restaurants. 30-day free trial.">
+    <meta name="keywords" content="queue management system, queue management software, digital queue, waiting room management, customer queue, business queue system, clinic queue, retail queue, restaurant queue, South Africa">
+    <meta name="author" content="Orbit Queue Management">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://orbit-4b990.web.app/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://orbit-4b990.web.app/">
+    <meta property="og:title" content="Orbit - Smart Queue Management System for Businesses">
+    <meta property="og:description" content="Modern queue management with real-time display, voice announcements, and easy dashboard. 30-day free trial.">
+    <meta property="og:image" content="https://orbit-4b990.web.app/orbit-og-image.jpg">
+    <meta property="og:site_name" content="Orbit Queue Management">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://orbit-4b990.web.app/">
+    <meta property="twitter:title" content="Orbit - Smart Queue Management System">
+    <meta property="twitter:description" content="Modern queue management with real-time display and voice announcements. 30-day free trial.">
+    <meta property="twitter:image" content="https://orbit-4b990.web.app/orbit-og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Orbit Queue Management System",
+      "description": "Modern queue management system with real-time display, voice announcements, and easy dashboard for businesses.",
+      "url": "https://orbit-4b990.web.app/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "299",
+        "priceCurrency": "ZAR",
+        "priceValidUntil": "2025-12-31",
+        "availability": "https://schema.org/InStock"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "127"
+      },
+      "provider": {
+        "@type": "Organization",
+        "name": "Orbit Queue Management",
+        "url": "https://orbit-4b990.web.app/"
+      }
+    }
+    </script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="orbit-icon"><img src="assets\orbittLogoDONE.png" alt="Logo" width="80" height="80"></div>
+                <span>Orbitt</span>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+                <a href="Login.html" class="btn-secondary">Login</a>
+                <a href="Signup.html" class="btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Waiting in line sucks.<b style="color:#2f2f2f;"> Managing it shouldn’t.</b></h1>
+                <p style="color:#000;">A smart queue system with live displays and voice announcements  ,keeping customers informed and staff stress-free.</p>
+                <div class="hero-buttons">
+                    <a href="Signup.html" class="btn-hero-primary">Start Free Trial</a>
+                    <a href="Login.html" class="btn-hero-secondary">Login</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                        <div class="mockup-dot"></div>
+                    </div>
+                    <div class="mockup-content">
+                        <div class="queue-preview active">
+                            <span><strong>#1</strong> John Anderson</span>
+                            <span style="font-size: 12px;">NOW</span>
+                        </div>
+                        <div class="queue-preview">
+                            <span><strong>#2</strong> Maria Santos</span>
+                            <span style="font-size: 12px;">~12 min</span>
+                        </div>
+                        <div class="queue-preview">
+                            <span><strong>#3</strong> David Chen</span>
+                            <span style="font-size: 12px;">~24 min</span>
+                        </div>
+                        <div class="queue-preview">
+                            <span><strong>#4</strong> Emily Johnson</span>
+                            <span style="font-size: 12px;">~36 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="features-container">
+            <h2 class="section-title">Everything you need</h2>
+            <p class="section-subtitle">Built for any business, designed for simplicity</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-volume-up"></i></div>
+                    <h3>Voice Announcements</h3>
+                    <p>Automatic voice announcements on the public display when calling the next customer. Clear audio notifications keep everyone informed.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi-person-plus"></i></div>
+                    <h3>Fast Queue Entry</h3>
+                    <p>Staff can easily add customers to the queue from the dashboard. Each entry is automatically managed in real time, keeping the waiting line organized and up to date.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-speedometer2"></i></div>
+                    <h3>Real-time Dashboard</h3>
+                    <p>See your entire queue at a glance. Call the next customer with one click and track wait times effortlessly.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-tv"></i></div>
+                    <h3>Public Display Screen</h3>
+                    <p>Standalone display page shows currently serving number and next 3 customers. Perfect for TV screens in waiting areas.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
+                    <h3>Daily Reset</h3>
+                    <p>Queue numbers automatically reset each day, starting fresh from #1 every morning for better organization.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+                    <h3>Secure & Private</h3>
+                    <p>Firebase-powered security with encrypted data. Your customer information is always protected.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="steps-container">
+            <h2 class="section-title">How it works</h2>
+            <p class="section-subtitle">Get started in minutes, not hours</p>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Fast check-in</h3>
+                        <p>Staff quickly adds customers to the queue with name, phone, and gender.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Display on Screen</h3>
+                        <p>Customers see their queue number on the public display screen. Currently serving number and next 3 customers are always visible.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Call with Voice</h3>
+                        <p>Click "Call" on the dashboard to serve the next customer. Voice announcement plays on the display screen automatically.</p>
+                    </div>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Smarter Business</h3>
+                        <p>Reduce crowding, improve customer flow, and run your business more efficiently with real-time queue management.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section: Display different subscription plans -->
+    <section id="pricing" class="pricing">
+        <div class="pricing-container">
+            <h2 class="section-title">Simple, transparent pricing</h2>
+            <p class="section-subtitle">Pay only for what you use. No hidden fees.</p>
+
+            <div class="pricing-grid">
+                <!-- Starter Plan: Available now for solo practitioners -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Starter</h3>
+                        <div class="price">
+                            <span class="currency">R</span>
+                            <span class="amount">299</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <p class="plan-description">Perfect for small businesses and solo practitioners.</p>
+                        <p class="plan-description"><strong>30-Day Free Trial</strong></p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Real-Time Queue Dashboard</li>
+                        <li>✓ Public Display Screen</li>
+                        <li>✓ Voice Announcements</li>
+                        <li>✓ Quick Add to Queue</li>
+                        <li>✓ Search & Filter Tools</li>
+                        <li>✓ Daily Queue Reset</li>
+                    </ul>
+                    <a href="Signup.html" class="btn-plan">Start Free Trial</a>
+                </div>
+
+                <!-- Professional Plan: Coming soon for growing practices -->
+                <div class="pricing-card disabled">
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="plan-header">
+                        <h3>Professional</h3>
+                        <div class="price">
+                            <span class="currency">R</span>
+                            <span class="amount">799</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <p class="plan-description">For growing businesses</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Everything in Starter</li>
+                        <li>✓ Up to 5 staff accounts</li>
+                        <li>✓ Queue analytics & reports</li>
+                        <li>✓ Customer history tracking</li>
+                        <li>✓ Export data to Excel</li>
+                        <li>✓ Priority email support</li>
+                        <li>✓ Custom display themes</li>
+                    </ul>
+                    <button class="btn-plan" disabled>Coming Soon</button>
+                </div>
+
+                <!-- Enterprise Plan: Coming soon for large clinics -->
+                <div class="pricing-card disabled">
+                    <div class="coming-soon-badge">Coming Soon</div>
+                    <div class="plan-header">
+                        <h3>Enterprise</h3>
+                        <div class="price">
+                            <span class="amount">Custom</span>
+                        </div>
+                        <p class="plan-description">For large businesses & chains</p>
+                    </div>
+                    <ul class="plan-features">
+                        <li>✓ Everything in Professional</li>
+                        <li>✓ Unlimited staff accounts</li>
+                        <li>✓ Multi-location support</li>
+                        <li>✓ Advanced analytics dashboard</li>
+                        <li>✓ Custom queue workflows</li>
+                        <li>✓ Priority phone support</li>
+                        <li>✓ Dedicated onboarding</li>
+                    </ul>
+                    <button class="btn-plan" disabled>Coming Soon</button>
+                </div>
+            </div>
+
+            <!-- Additional pricing information -->
+            <p class="pricing-note"><i class="bi bi-credit-card"></i> 30-Day Free Trial • No credit card required  • No contracts • Cancel anytime</p>
+        </div>
+    </section>
+
+    <!-- Contact Section: Contact information and form -->
+    <section id="contact" class="contact">
+        <div class="contact-container">
+            <div class="contact-content">
+                <h2 class="section-title">Get in touch</h2>
+                <p class="section-subtitle">Have questions? We'd love to hear from you.</p>
+
+                <!-- Contact information display -->
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="bi bi-envelope" style="color: white;"></i></div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>hello@orbitt.co.za</p>
+                        </div>
+                    
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="bi bi-envelope" style="color: white;"></i></div>
+                        <div>
+                            <h4>Support email</h4>
+                            <p>support@orbitt.co.za</p>
+                        </div>
+                    
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="bi bi-telephone" style="color: white;"></i></div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p><b>+27 745352163</b></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="bi bi-chat-dots" style="color: white;"></i></div>
+                        <div>
+                            <h4>Support</h4>
+                            <p>Available Mon-Fri, 8am-5pm SAST</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact form for user inquiries -->
+            <div class="contact-form-wrapper">
+                <form class="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" required placeholder="John Smith">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="john@business.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+27 82 123 4567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="clinic">Business Name</label>
+                        <input type="text" id="clinic" name="clinic" placeholder="Smith's Retail Store">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="4"  placeholder="Tell us about your business and how we can help..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section: Final conversion push -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Ready to transform your business?</h2>
+            <p>Join businesses already using Orbit to provide better customer experiences.</p>
+            <div class="cta-buttons">
+                <a href="Signup.html" class="btn-hero-primary">Start 30-Day Free Trial</a>
+                <a href="Login.html" class="btn-hero-secondary">Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer: Company info and navigation links -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Brand information -->
+            <div class="footer-brand">
+                <h3>Orbitt</h3>
+                <p>Smart queue management for modern businesses. No apps. No hassle. Just better customer service.</p>
+            </div>
+
+            <!-- Product links -->
+            <div class="footer-links">
+                <h4>Product</h4>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+                
+            </div>
+
+            <!-- Company links -->
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Blog</a>
+                <a href="#">Careers</a>
+                <a href="#contact">Contact</a>
+            </div>
+
+            <!-- Support links -->
+            <div class="footer-links">
+                <h4>Support</h4>
+                <a href="help.html">Help Center</a>
+                <a href="faq.html">FAQ</a>
+                <a href="support.html">Contact Support</a>
+            </div>
+
+            <!-- Legal links -->
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="security.html">Security</a>
+                
+            </div>
+        </div>
+
+        <!-- Copyright information -->
+        <div class="footer-bottom">
+            <p>© 2024 Orbitt. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- JavaScript file for interactive functionality -->
+    <script src="script.js"></script>
+</body>
+</html>

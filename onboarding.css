@@ -1,0 +1,249 @@
+/* Onboarding Overlay */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.onboarding-overlay.active {
+    display: flex;
+}
+
+/* Onboarding Modal */
+.onboarding-modal {
+    background: white;
+    border-radius: 20px;
+    padding: 48px;
+    max-width: 600px;
+    width: 90%;
+    text-align: center;
+    animation: slideUp 0.4s ease;
+    position: relative;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.onboarding-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: white;
+    margin: 0 auto 24px;
+}
+
+.onboarding-modal h2 {
+    font-size: 32px;
+    color: #1a202c;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.onboarding-modal p {
+    font-size: 16px;
+    color: #718096;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.onboarding-steps {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    transition: all 0.3s;
+}
+
+.step-dot.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 32px;
+    border-radius: 6px;
+}
+
+.onboarding-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.btn-onboarding {
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #f7fafc;
+    color: #718096;
+    border: 2px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #edf2f7;
+}
+
+/* Skip Button */
+.skip-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: #a0aec0;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.skip-btn:hover {
+    color: #718096;
+}
+
+/* Spotlight Effect */
+.onboarding-spotlight {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    border: 3px solid #667eea;
+    border-radius: 12px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.8), 0 0 30px rgba(102, 126, 234, 0.6);
+    transition: all 0.3s ease;
+}
+
+/* Tooltip */
+.onboarding-tooltip {
+    position: fixed;
+    z-index: 10001;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 350px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.onboarding-tooltip h3 {
+    font-size: 20px;
+    color: #1a202c;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.onboarding-tooltip p {
+    font-size: 14px;
+    color: #718096;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.onboarding-tooltip .tooltip-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.onboarding-tooltip button {
+    flex: 1;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+}
+
+.tooltip-btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tooltip-btn-secondary {
+    background: #f7fafc;
+    color: #718096;
+    border: 2px solid #e2e8f0;
+}
+
+.tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.tooltip-arrow.top {
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px 10px 0 10px;
+    border-color: white transparent transparent transparent;
+}
+
+.tooltip-arrow.bottom {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent white transparent;
+}
+
+.tooltip-arrow.left {
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent white;
+}
+
+.tooltip-arrow.right {
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+}

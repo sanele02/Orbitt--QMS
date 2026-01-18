@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit - Profile Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="ProfileSettings.css">
+    <link rel="stylesheet" href="onboarding.css">
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header" id="sidebarToggle">
+                <div class="logo-section">
+                    <div class="logo-icon"><img src="assets\orbittLogoDONE.png" alt="Logo" width="80" height="80"></div>
+                    <span class="logo-text">Orbitt</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <span class="nav-icon"><i class="bi-app-indicator"></i></span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="QueueManagement.html" class="nav-item">
+                    <span class="nav-icon"><i class="bi bi-list-ol"></i></span>
+                    <span class="nav-text">Queue Management</span>
+                </a>
+                <a href="ProfileSettings.html" class="nav-item active">
+                    <span class="nav-icon"><i class="bi bi-gear"></i></span>
+                    <span class="nav-text">Profile Settings</span>
+                </a>
+            </nav>
+
+            <div class="logout-section">
+                <a href="#" class="nav-item" id="logoutBtn" onclick="event.preventDefault();">
+                    <span class="nav-icon"><i class="bi bi-box-arrow-right"></i></span>
+                    <span class="nav-text">Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Profile Settings</h1>
+                <div class="user-info">
+                    <div>
+                        <div style="font-weight: 600; color: #1f2937;" id="userName">Loading...</div>
+                    </div>
+                    <div class="user-avatar" id="userAvatar">DR</div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Action Buttons -->
+                <div class="action-bar">
+                    <button id="editBtn" class="btn-edit">
+                        <i class="bi bi-pencil"></i> Edit Profile
+                    </button>
+
+                    <button class="btn-save" id="saveBtn" style="display: none;">
+                        <i class="bi bi-check-lg"></i> Save Changes
+                    </button>
+
+                    <button class="btn-cancel" id="cancelBtn" style="display: none;">
+                        <i class="bi bi-x-lg"></i> Cancel
+                    </button>
+                </div>
+
+                <!-- 1. Account Info Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <!-- icon -->
+                        <div class="section-icon"><i class="bi bi-person-circle"></i></div>
+                        <div>
+                            <h2 class="section-title">Account Information</h2>
+                            <p class="section-subtitle">Manage your personal profile and account details</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="doctor-name-section">
+                            <div class="doctor-avatar">
+                                <div class="avatar-placeholder" id="avatarDisplay">DR</div>
+                            </div>
+                            <!--  -->
+                            <div class="doctor-info">
+                                <h3 id="doctorNameDisplay">Loading...</h3>
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <!-- input boxes -->
+                            <div class="form-group">
+                                <label>Full Name *</label>
+                                <input type="text" id="fullName" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="phoneNumber" disabled>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="email" disabled class="readonly-field">
+                                <small>cannot be changed</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sender ID</label>
+                                <input type="text" id="senderId" disabled class="readonly-field">
+                                <!-- <small>Auto-generated for SMS notifications</small>-->
+                                <small>Auto-generated ID</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Business Information Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-building"></i></div>
+                        <div>
+                            <h2 class="section-title">Business Information</h2>
+                            <p class="section-subtitle">Update your business details</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Business Name *</label>
+                                <input type="text" id="businessName" disabled>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label>Business Address</label>
+                                <textarea id="businessAddress" rows="3" disabled></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Business Type</label>
+                                <select id="businessType" disabled>
+                                    <option value="">Select Business Type</option>
+                                    <option value="healthcare">Healthcare/Medical</option>
+                                    <option value="retail">Retail</option>
+                                    <option value="restaurant">Restaurant/Food Service</option>
+                                    <option value="salon">Salon/Beauty</option>
+                                    <option value="automotive">Automotive</option>
+                                    <option value="government">Government Office</option>
+                                    <option value="banking">Banking/Financial</option>
+                                    <option value="education">Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Country</label>
+                                <select id="country" disabled>
+                                    <option value="">Select Country</option>
+                                    <option value="ZA">South Africa</option>
+                                    <option value="NG">Nigeria</option>
+                                    <option value="KE">Kenya</option>
+                                    <option value="GH">Ghana</option>
+                                    <option value="UG">Uganda</option>
+                                    <option value="TZ">Tanzania</option>
+                                    <option value="ZW">Zimbabwe</option>
+                                    <option value="BW">Botswana</option>
+                                    <option value="ZM">Zambia</option>
+                                    <option value="MW">Malawi</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Voice Announcements Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-volume-up"></i></div>
+                        <div>
+                            <h2 class="section-title">Voice Announcements</h2>
+                            <p class="section-subtitle">Control voice announcements on queue display</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: #f9fafb; border-radius: 8px;">
+                            <div>
+                                <h4 style="margin: 0 0 8px 0; color: #1f2937;">Enable Voice Announcements</h4>
+                                <p style="margin: 0; color: #6b7280; font-size: 14px;">Automatically announce queue numbers on the display screen</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="voiceToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Subscription Package Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-box-seam"></i></div>
+                        <div>
+                            <h2 class="section-title">Subscription Package</h2>
+                            <p class="section-subtitle">Manage your subscription plan</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="package-display">
+                            <div class="current-package">
+                                <div class="package-badge" id="packageBadge">Starter</div>
+                                <h3 id="packageName">Starter Plan</h3>
+                                <p class="package-price" id="packagePrice">R149/month</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Change Package</label>
+                            <select id="packageSelect" disabled>
+                                <option value="starter">Starter - R299/month</option>
+                                <option value="professional" disabled>Professional - R799/month (Coming Soon)</option>
+                                <option value="enterprise" disabled>Enterprise - Custom (Coming Soon)</option>
+                            </select>
+                            <small>Only Starter plan is currently available</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Billing & Subscription Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-credit-card"></i></div>
+                        <div>
+                            <h2 class="section-title">Billing & Subscription</h2>
+                            <p class="section-subtitle">Manage your subscription and payment details</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="billing-info">
+                            <div class="billing-card">
+                                <div class="billing-header">
+                                    <h4>Current Subscription</h4>
+                                    <span class="status-badge active" id="subscriptionStatusBadge">Active</span>
+                                </div>
+                                <div class="billing-details">
+                                    <div class="detail-row">
+                                        <span>Plan:</span>
+                                        <strong id="currentPlan">Starter Plan</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Status:</span>
+                                        <strong id="subscriptionStatusText">Active</strong>
+                                    </div>
+                                    <div class="detail-row" id="trialEndRow" style="display: none;">
+                                        <span>Trial Ends:</span>
+                                        <strong id="trialEndDate">-</strong>
+                                    </div>
+                                    <div class="detail-row" id="amountRow">
+                                        <span>Amount:</span>
+                                        <strong id="currentAmount">R149/month</strong>
+                                    </div>
+                                    <div class="detail-row" id="nextBillingRow">
+                                        <span>Next Billing:</span>
+                                        <strong id="nextBilling">-</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- UNAVAILABLE FOR NOW 
+                        <div class="billing-actions">
+                            <button class="btn-secondary" onclick="handleManageSubscription()">
+                                <i class="bi bi-gear"></i> Manage Subscription
+                            </button>
+                            <button class="btn-secondary" onclick="handleViewInvoices()">
+                                <i class="bi bi-receipt"></i> View Invoices
+                            </button>
+                        </div>
+                        -->
+                        <p class="billing-note">
+                            <i class="bi bi-info-circle"></i> Subscription payments are processed securely using PayFast
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="settings-section danger-zone">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-exclamation-triangle"></i></div>
+                        <div>
+                            <h2 class="section-title">Danger Zone</h2>
+                            <p class="section-subtitle">Irreversible actions</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-content">
+                        <div class="danger-action">
+                            <div>
+                                <h4>Delete Account</h4>
+                                <p>Permanently delete your account and all associated data</p>
+                            </div>
+                            <button class="btn-danger" onclick="handleDeleteAccount()">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal" style="display: none;">
+        <div class="modal-content success">
+            <div class="modal-icon"><i class="bi bi-check-circle-fill"></i></div>
+            <h3>Changes Saved!</h3>
+            <p>Your profile has been updated successfully.</p>
+            <button class="btn-modal" id="modalOkBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 style="color: #ef4444; margin: 0;"><i class="bi bi-exclamation-triangle"></i> Delete Account</h2>
+                <button class="close-btn" onclick="closeDeleteModal()">&times;</button>
+            </div>
+            <div style="padding: 24px;">
+                <p style="color: #718096; margin-bottom: 24px;">We're sorry to see you go. Please help us improve by telling us why you're leaving:</p>
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="too_expensive" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Too expensive</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="not_using" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Not using it anymore</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="missing_features" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Missing features I need</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="difficult_to_use" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Difficult to use</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="found_alternative" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Found a better alternative</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px; cursor: pointer;">
+                        <input type="radio" name="deleteReason" value="other" style="width: 16px; height: 16px; margin: 0 10px 0 0; flex-shrink: 0;">
+                        <span>Other</span>
+                    </label>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">Additional feedback (optional):</label>
+                    <textarea id="deleteFeedback" rows="3" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;" placeholder="Tell us more..."></textarea>
+                </div>
+
+                <div style="background: #fef2f2; border: 2px solid #fecaca; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                    <p style="color: #991b1b; font-weight: 600; margin-bottom: 8px;">⚠️ This action cannot be undone</p>
+                    <p style="color: #7f1d1d; font-size: 14px; margin: 0;">All your data, queue history, and settings will be permanently deleted.</p>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #2d3748;">Type <strong>DELETE</strong> to confirm:</label>
+                    <input type="text" id="deleteConfirmInput" style="width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px;" placeholder="DELETE">
+                </div>
+
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="closeDeleteModal()" style="flex: 1; padding: 12px; background: #f7fafc; border: 2px solid #e2e8f0; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    <button onclick="confirmDeleteAccount()" style="flex: 1; padding: 12px; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase v8 SDK for onboarding -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <!-- Onboarding Overlay -->
+    <div class="onboarding-overlay" id="onboardingOverlay">
+        <div class="onboarding-modal"></div>
+    </div>
+    
+    <script src="onboarding.js"></script>
+    <!-- JS Module -->
+    <script type="module" src="ProfileSettings.js"></script>
+    
+    <script>
+        // Check if coming from onboarding
+        if (typeof continueOnboardingFromProfile === 'function') {
+            continueOnboardingFromProfile();
+        }
+    </script>
+</body>
+</html>

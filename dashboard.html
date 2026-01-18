@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orbit Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="onboarding.css" />
+
+  <!-- logo clor :#056ddc-->
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar  -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header" onclick="toggleSidebar()">
+                <div class="logo-section">
+                    <div class="logo-icon"><img src="assets\orbittLogoDONE.png" alt="Logo" width="80" height="80"></div>
+                    <span class="logo-text">Orbitt</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item active">
+                    <span class="nav-icon"><i class="bi-app-indicator"></i></span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
+                <a href="QueueManagement.html" class="nav-item">
+                    <span class="nav-icon"><i class="bi bi-list-ol"></i></span>
+                    <span class="nav-text">Queue Management</span>
+                </a>
+                <a href="ProfileSettings.html" class="nav-item">
+                    <span class="nav-icon"><i class="bi bi-gear"></i></span>
+                    <span class="nav-text">Profile Settings</span>
+                </a>
+            </nav>
+
+            <div class="logout-section">
+                <a href="#" class="nav-item" onclick="event.preventDefault(); logout();">
+                    <span class="nav-icon"><i class="bi bi-box-arrow-right"></i></span>
+                    <span class="nav-text">Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title">Dashboard</h1>
+                <div class="user-info">
+                    <div>
+                        <div id="userFullName" style="font-weight: 600; color: #1f2937;">Loading...</div>
+                    </div>
+                    <div id="userAvatar" class="user-avatar">?</div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                        </div>
+                        <div class="stat-label">Total in Queue</div>
+                        <div class="stat-value" id="totalInQueue">6</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="bi bi-clock"></i></div>
+                        </div>
+                        <div class="stat-label">Average Wait Time</div>
+                        <div class="stat-value">18m</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+                        </div>
+                        <div class="stat-label">Served Today</div>
+                        <div class="stat-value" id="seenToday">0</div>
+                    </div>
+                </div>
+
+                <!-- Current Patient -->
+                <div class="current-patient-card empty" id="currentPatientCard">
+                    <div class="current-label">NOW SERVING</div>
+                    <div class="current-patient-info">
+                        <div class="patient-details">
+                            <h2 id="currentPatientName">No patient currently</h2>
+                            <div class="patient-meta" id="currentPatientMeta">Click "Call" on a customer to start service</div>
+                        </div>
+                        <div class="status-badge" id="currentStatus">Waiting</div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="action-section">
+                    <button class="btn-primary" onclick="openAddModal()">
+                        <i class="bi bi-plus-lg"></i>
+                        Add to Queue
+                    </button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-section">
+                    <div class="search-bar">
+                        <span class="search-icon"><i class="bi bi-search"></i></span>
+                        <input type="text" id="searchInput" placeholder="Search by name or phone number..." onkeyup="searchQueue()">
+                    </div>
+                </div>
+
+                <!-- Queue List -->
+                <div class="queue-section">
+                    <div class="queue-header">
+                        <h3 class="queue-title">Waiting Queue</h3>
+                    </div>
+                    <div class="queue-list" id="queueList">
+                        <!-- Queue items will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Patient Modal -->
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Customer to Queue</h2>
+                <button class="close-btn" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form onsubmit="addPatient(event)">
+                <div class="form-group">
+                    <label>Q-Number</label>
+                    <div class="auto-generated" id="qNumberDisplay">#1 (Auto-generated)</div>
+                </div>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="patientName" required placeholder="Enter customer name">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="patientPhone" required placeholder="+27 82 123 4567">
+                </div>
+                <div class="form-group">
+                    <label>Gender *</label>
+                    <select id="patientGender" required>
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-modal btn-modal-secondary" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn-modal btn-modal-primary">Add to Queue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Patient Action Modal -->
+    <div class="modal" id="patientActionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="patientActionTitle">Patient #1 — Select an action</h2>
+                <button class="close-btn" onclick="closePatientActionModal()">&times;</button>
+            </div>
+            <div id="countdownDisplay" style="text-align: center; padding: 10px; font-size: 18px; color: #ff6b35; font-weight: bold; display: none;">
+                Auto-reset in <span id="countdownTimer">4</span> seconds
+            </div>
+            <div class="patient-action-content">
+                <div class="action-buttons-horizontal">
+                    <button class="action-btn-horizontal call btn-call" onclick="handlePatientAction('call')">
+                        <i class="bi bi-telephone-fill"></i>
+                        <span>Call</span>
+                    </button>
+                    
+                    <button class="action-btn-horizontal skip btn-skip" onclick="handlePatientAction('skip')">
+                        <i class="bi bi-clock-fill"></i>
+                        <span>Skip</span>
+                    </button>
+                    
+                    <button class="action-btn-horizontal arrived" onclick="handlePatientAction('arrived')">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span>Arrived</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2 class="modal-title" id="confirmationTitle">Confirm Action</h2>
+            </div>
+            <div class="confirmation-content">
+                <p id="confirmationMessage">Are you sure you want to remove this patient?</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn-modal btn-modal-secondary" onclick="closeConfirmationModal()">Cancel</button>
+                    <button type="button" class="btn-modal btn-modal-danger" onclick="confirmAction()" id="confirmBtn">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Undo Notification -->
+    <div class="undo-notification" id="undoNotification" style="display: none;">
+        <div class="undo-content">
+            <span id="undoMessage">Patient moved to back of queue</span>
+            <button class="undo-btn" onclick="undoLastAction()">Undo</button>
+        </div>
+    </div>
+
+
+  <!-- Firebase v8 SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  
+  <script src="onboarding.js"></script>
+
+  <!-- Onboarding Overlay -->
+  <div class="onboarding-overlay" id="onboardingOverlay">
+    <div class="onboarding-modal"></div>
+  </div>
+  <script src="dashboard.js"></script>
+</body>
+</html>

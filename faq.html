@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Orbit Queue Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="assets\orbittLogoDONE.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #2563eb; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        h1 { color: #2563eb; margin-bottom: 30px; }
+        .faq-item { background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; }
+        .faq-question { padding: 20px; background: #f8fafc; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .faq-question:hover { background: #f1f5f9; }
+        .faq-answer { padding: 20px; display: none; border-top: 1px solid #e2e8f0; }
+        .faq-answer.active { display: block; }
+        .faq-icon { transition: transform 0.3s; }
+        .faq-icon.rotated { transform: rotate(180deg); }
+        .category { margin-bottom: 30px; }
+        .category h2 { color: #1e40af; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="back-link"><i class="bi bi-arrow-left"></i> Back</a>
+        
+        <h1><i class="bi bi-question-circle" style="color: #2563eb; margin-right: 10px;"></i>Frequently Asked Questions</h1>
+        <p>Find quick answers to common questions about Orbit Queue Management System.</p>
+
+        <div class="category">
+            <h2>General Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What is Orbit Queue Management System?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Orbit is a modern, web-based queue management system designed for businesses of all sizes. It helps you manage customer queues efficiently with real-time displays, voice announcements, and easy-to-use dashboard controls.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Do I need to install any software?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>No! Orbit is completely web-based. You can access it from any device with a web browser - computers, tablets, or smartphones. No downloads or installations required.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What types of businesses can use Orbit?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Orbit works for any business with customer queues: clinics, hospitals, banks, government offices, retail stores, restaurants, salons, and more. It's designed to be flexible for different industries.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Pricing & Plans</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How much does Orbit cost?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our Starter plan is R299/month with a 30-day free trial. No setup fees, no contracts. You can cancel anytime. Professional and Enterprise plans are coming soon.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is there a free trial?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! We offer a 30-day free trial with full access to all Starter plan features. No credit card required to start your trial.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Can I cancel anytime?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! There are no contracts or cancellation fees. You can cancel your subscription at any time from your profile settings.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Technical Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I set up the display screen?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Simply open the Queue Display page on any device connected to your TV or monitor. Use fullscreen mode (F11) for the best experience. The display updates automatically in real-time.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Do voice announcements work on all devices?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Voice announcements work on most modern browsers and devices. Make sure your device volume is turned up and browser permissions allow audio playback.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What happens if my internet goes down?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Orbit requires an internet connection to function. However, your queue data is safely stored in the cloud and will be available as soon as your connection is restored.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            <h2>Support & Security</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is my data secure?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! We use enterprise-grade security with Google Firebase. All data is encrypted in transit and at rest. We're GDPR and POPIA compliant.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I get support?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>You can contact our support team via email at support@orbitt.co.za . We typically respond within 24 hours during business days.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Do you offer training or onboarding?</span>
+                    <i class="bi bi-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Orbit is designed to be intuitive and easy to use. We provide comprehensive help documentation and video tutorials. Personal onboarding is available for Enterprise customers.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 50px; text-align: center; padding: 30px; background: #f0f9ff; border-radius: 12px;">
+            <h3 style="color: #1e40af; margin-bottom: 15px;">Still Have Questions?</h3>
+            <p style="margin-bottom: 20px;">Can't find the answer you're looking for? We're here to help!</p>
+            <a href="support.html" style="background: #2563eb; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; font-weight: 600; margin-right: 15px;">Contact Support</a>
+            <a href="help.html" style="background: white; color: #2563eb; border: 2px solid #2563eb; padding: 10px 30px; text-decoration: none; border-radius: 8px; font-weight: 600;">View Help Docs</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.faq-icon').forEach(item => {
+                if (item !== icon) {
+                    item.classList.remove('rotated');
+                }
+            });
+            
+            // Toggle current FAQ
+            answer.classList.toggle('active');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>
